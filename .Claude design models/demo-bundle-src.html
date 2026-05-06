@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Isis Novais — Demo Desktop + Mobile</title>
+
+<meta name="ext-resource-dependency" content="Site Isis Novais (standalone).html" data-resource-id="siteStandalone" />
+
+<template id="__bundler_thumbnail" data-bg-color="#1A140F">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#1A140F"/>
+    <rect x="120" y="180" width="640" height="440" rx="14" fill="#26201A" stroke="#3a342c" stroke-width="1"/>
+    <rect x="820" y="160" width="240" height="480" rx="34" fill="#0F0B08" stroke="#3a342c" stroke-width="1"/>
+    <rect x="836" y="180" width="208" height="440" rx="22" fill="#FAF6F0"/>
+    <rect x="140" y="220" width="600" height="380" rx="6" fill="#FAF6F0"/>
+    <g transform="translate(440 400)" stroke="#8E4A30" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <g transform="scale(2.2)">
+        <path d="M0 4 C -10 -12, -24 -16, -26 -8 C -28 0, -18 6, 0 4"/>
+        <path d="M0 4 C -8 14, -18 18, -20 12 C -22 6, -14 4, 0 4"/>
+        <path d="M0 4 C 10 -12, 24 -16, 26 -8 C 28 0, 18 6, 0 4"/>
+        <path d="M0 4 C 8 14, 18 18, 20 12 C 22 6, 14 4, 0 4"/>
+      </g>
+    </g>
+    <text x="600" y="700" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#E5B891" font-style="italic">Demo · Desktop &amp; Mobile</text>
+  </svg>
+</template>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#1A140F;color:#FAF6F0;font-family:'Inter',ui-sans-serif,system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:18px 32px;background:rgba(26,20,15,0.65);backdrop-filter:blur(20px) saturate(160%);border-bottom:1px solid rgba(255,252,247,0.08)}
+  .topbar .brand{display:flex;align-items:center;gap:12px;font-family:'Fraunces',serif;font-size:18px;font-weight:400}
+  .topbar .brand small{display:block;font-family:'Inter',sans-serif;font-size:9.5px;letter-spacing:0.18em;text-transform:uppercase;color:#E5B891;margin-top:3px;font-weight:500}
+  .topbar .controls{display:flex;align-items:center;gap:10px}
+  .topbar button, .topbar a.btn{appearance:none;background:rgba(255,252,247,0.08);color:#FAF6F0;border:1px solid rgba(255,252,247,0.14);border-radius:999px;padding:9px 16px;font-size:12.5px;font-weight:500;font-family:inherit;letter-spacing:0.01em;cursor:pointer;transition:background .2s ease, border-color .2s ease;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+  .topbar button:hover, .topbar a.btn:hover{background:rgba(255,252,247,0.14);border-color:rgba(255,252,247,0.28)}
+  .topbar button.primary{background:#B8694A;border-color:#B8694A;color:#FFFCF7}
+  .topbar button.primary:hover{background:#8E4A30;border-color:#8E4A30}
+  .topbar .dot{width:6px;height:6px;border-radius:50%;background:#9FBF6E;box-shadow:0 0 0 3px rgba(159,191,110,0.2)}
+  .topbar .dot.recording{background:#E25C45;box-shadow:0 0 0 3px rgba(226,92,69,0.25);animation:pulse 1.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+
+  .stage{padding:96px 32px 64px;display:flex;align-items:flex-start;justify-content:center;gap:48px;flex-wrap:nowrap;min-height:100vh}
+
+  /* Desktop frame */
+  .desktop{flex:1 1 auto;max-width:1200px;min-width:480px}
+  .browser{background:#26201A;border-radius:14px;overflow:hidden;box-shadow:0 30px 80px -20px rgba(0,0,0,0.6),0 0 0 1px rgba(255,252,247,0.06);border:1px solid rgba(255,252,247,0.08)}
+  .browser-bar{display:flex;align-items:center;gap:12px;padding:11px 16px;background:#1F1A14;border-bottom:1px solid rgba(255,252,247,0.06)}
+  .traffic{display:flex;gap:7px}
+  .traffic span{width:11px;height:11px;border-radius:50%;background:#3a342c}
+  .traffic span:nth-child(1){background:#E25C45}
+  .traffic span:nth-child(2){background:#E5B891}
+  .traffic span:nth-child(3){background:#9FBF6E}
+  .url-pill{flex:1;background:#2C261F;border-radius:8px;padding:6px 14px;font-size:12px;color:#C9BCA8;display:flex;align-items:center;gap:8px;font-family:'Inter',sans-serif}
+  .url-pill .lock{width:11px;height:11px;opacity:0.6}
+  .browser-frame{width:100%;height:720px;border:0;display:block;background:#FAF6F0}
+  .frame-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:0 6px}
+  .frame-label .lbl{font-family:'Fraunces',serif;font-size:14px;font-style:italic;color:#E5B891;letter-spacing:0.02em}
+  .frame-label .meta{font-size:10.5px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,252,247,0.45)}
+
+  /* iPhone frame */
+  .mobile{flex:0 0 auto;width:380px}
+  .iphone{position:relative;width:380px;height:780px;border-radius:54px;background:linear-gradient(180deg,#0F0B08,#1A140F);padding:8px;box-shadow:0 30px 70px -20px rgba(0,0,0,0.7),0 0 0 1px rgba(255,252,247,0.05),inset 0 0 0 2px rgba(255,252,247,0.04)}
+  .iphone-screen{position:relative;width:100%;height:100%;border-radius:46px;overflow:hidden;background:#000}
+  .iphone-notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:115px;height:34px;background:#000;border-radius:20px;z-index:5}
+  .iphone-frame{width:100%;height:100%;border:0;display:block;background:#FAF6F0}
+  .iphone-side{position:absolute;background:#0F0B08;border-radius:2px}
+  .iphone-side.power{right:-2px;top:180px;width:3px;height:96px}
+  .iphone-side.vol1{left:-2px;top:140px;width:3px;height:54px}
+  .iphone-side.vol2{left:-2px;top:210px;width:3px;height:54px}
+
+  /* Helper labels */
+  .helper{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:rgba(255,252,247,0.08);backdrop-filter:blur(16px);border:1px solid rgba(255,252,247,0.12);border-radius:999px;padding:10px 18px;font-size:12px;color:rgba(255,252,247,0.75);display:flex;align-items:center;gap:10px;z-index:40}
+  .helper kbd{background:rgba(255,252,247,0.1);border:1px solid rgba(255,252,247,0.18);border-radius:5px;padding:2px 6px;font-size:10.5px;font-family:'SF Mono',monospace}
+
+  /* Recording overlay */
+  .rec-overlay{position:fixed;top:80px;right:32px;background:rgba(226,92,69,0.95);color:#fff;padding:8px 14px;border-radius:999px;font-size:11.5px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;display:none;align-items:center;gap:8px;z-index:60;box-shadow:0 8px 24px -6px rgba(226,92,69,0.5)}
+  .rec-overlay.on{display:flex}
+  .rec-overlay .blink{width:7px;height:7px;border-radius:50%;background:#fff;animation:pulse 1s ease-in-out infinite}
+
+  /* progress bar at top during demo */
+  .progress{position:fixed;top:0;left:0;height:2px;background:#B8694A;z-index:100;width:0%;transition:width .15s linear}
+
+  @media (max-width: 1100px) {
+    .stage { flex-direction: column; align-items: center; gap: 56px; padding-top: 110px }
+    .desktop { width: 100%; max-width: 900px; min-width: 0 }
+    .browser-frame { height: 540px }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<div class="topbar">
+  <div class="brand">
+    <svg width="26" height="26" viewBox="0 0 64 64" fill="none" stroke="#E5B891" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M32 34 C 22 18, 8 14, 6 22 C 4 30, 14 36, 32 34" />
+      <path d="M32 34 C 24 44, 14 48, 12 42 C 10 36, 18 34, 32 34" />
+      <path d="M32 34 C 42 18, 56 14, 58 22 C 60 30, 50 36, 32 34" />
+      <path d="M32 34 C 40 44, 50 48, 52 42 C 54 36, 46 34, 32 34" />
+      <path d="M32 22 C 30 26, 30 32, 32 34 C 34 32, 34 26, 32 22 Z" />
+      <path d="M32 22 C 31 18, 28 16, 27 14" />
+      <path d="M32 22 C 33 18, 36 16, 37 14" />
+    </svg>
+    <span>Isis Novais<small>Demo · Desktop &amp; Mobile</small></span>
+  </div>
+  <div class="controls">
+    <span class="dot" id="syncDot" title="Sincronizado"></span>
+    <button id="syncToggle" title="Sincronizar scroll entre desktop e mobile">Sync ON</button>
+    <button id="playBtn" class="primary">▶ Reproduzir demo</button>
+    <a class="btn" href="index.html">Abrir site</a>
+  </div>
+</div>
+
+<div class="rec-overlay" id="recOverlay"><span class="blink"></span>Demo em execução</div>
+
+<div class="stage">
+  <div class="desktop">
+    <div class="frame-label">
+      <span class="lbl">Desktop · 1280px</span>
+      <span class="meta">Editorial · Terracota</span>
+    </div>
+    <div class="browser">
+      <div class="browser-bar">
+        <div class="traffic"><span></span><span></span><span></span></div>
+        <div class="url-pill">
+          <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          isisnovais.com.br
+        </div>
+      </div>
+      <iframe class="browser-frame" id="frameDesktop" title="Site Isis Novais — Desktop"></iframe>
+    </div>
+  </div>
+
+  <div class="mobile">
+    <div class="frame-label">
+      <span class="lbl">Mobile · iPhone</span>
+      <span class="meta">375 × 812</span>
+    </div>
+    <div class="iphone">
+      <div class="iphone-side vol1"></div>
+      <div class="iphone-side vol2"></div>
+      <div class="iphone-side power"></div>
+      <div class="iphone-screen">
+        <div class="iphone-notch"></div>
+        <iframe class="iphone-frame" id="frameMobile" title="Site Isis Novais — Mobile"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="helper">
+  Use <kbd>▶</kbd> para iniciar a demo automatizada · scroll é sincronizado entre os dois frames
+</div>
+
+<script>
+(() => {
+  const fd = document.getElementById('frameDesktop');
+  const fm = document.getElementById('frameMobile');
+  // Set src dynamically — uses bundled blob URL when standalone, falls back to index.html in dev
+  const siteUrl = (window.__resources && window.__resources.siteStandalone) || 'index.html';
+  fd.src = siteUrl;
+  fm.src = siteUrl;
+  const playBtn = document.getElementById('playBtn');
+  const recOverlay = document.getElementById('recOverlay');
+  const progress = document.getElementById('progress');
+  const syncBtn = document.getElementById('syncToggle');
+  const syncDot = document.getElementById('syncDot');
+  let syncOn = true;
+  let isPlaying = false;
+  let syncing = false; // flag pra evitar loop
+
+  syncBtn.addEventListener('click', () => {
+    syncOn = !syncOn;
+    syncBtn.textContent = syncOn ? 'Sync ON' : 'Sync OFF';
+    syncDot.style.background = syncOn ? '#9FBF6E' : '#666';
+    syncDot.style.boxShadow = syncOn ? '0 0 0 3px rgba(159,191,110,0.2)' : 'none';
+  });
+
+  // Sync scroll: desktop -> mobile e vice-versa, baseado em ratio
+  function setupSync() {
+    const dw = fd.contentWindow, mw = fm.contentWindow;
+    if (!dw || !mw) return;
+
+    const onScroll = (src, dst) => () => {
+      if (!syncOn || syncing || isPlaying) return;
+      const sd = src.document.documentElement;
+      const dd = dst.document.documentElement;
+      const ratio = sd.scrollTop / Math.max(1, sd.scrollHeight - sd.clientHeight);
+      const target = ratio * (dd.scrollHeight - dd.clientHeight);
+      syncing = true;
+      dst.scrollTo({ top: target, behavior: 'auto' });
+      requestAnimationFrame(() => { syncing = false; });
+    };
+    try {
+      dw.addEventListener('scroll', onScroll(dw, mw), { passive: true });
+      mw.addEventListener('scroll', onScroll(mw, dw), { passive: true });
+    } catch(e) {}
+  }
+
+  let loadedCount = 0;
+  const onLoad = () => {
+    loadedCount++;
+    if (loadedCount === 2) setupSync();
+  };
+  fd.addEventListener('load', onLoad);
+  fm.addEventListener('load', onLoad);
+
+  // Demo automatizada — scroll suave dos dois frames simultaneamente
+  function ease(t) { return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 3) / 2; }
+
+  function playDemo() {
+    if (isPlaying) return;
+    isPlaying = true;
+    playBtn.textContent = '■ Parar';
+    recOverlay.classList.add('on');
+
+    const dw = fd.contentWindow, mw = fm.contentWindow;
+    const dd = dw.document.documentElement;
+    const md = mw.document.documentElement;
+
+    // sequência de pontos-chave (ratio 0..1) com pausas
+    const keyframes = [
+      { ratio: 0,    hold: 1200 },   // hero
+      { ratio: 0.13, hold: 900  },   // sobre
+      { ratio: 0.30, hold: 900  },   // formação
+      { ratio: 0.45, hold: 900  },   // abordagem
+      { ratio: 0.58, hold: 900  },   // temas
+      { ratio: 0.72, hold: 900  },   // atendimento
+      { ratio: 0.84, hold: 900  },   // processo
+      { ratio: 0.95, hold: 1200 },   // contato
+      { ratio: 0,    hold: 600  },   // volta
+    ];
+
+    let idx = 0;
+    let stopped = false;
+    const stop = () => {
+      stopped = true;
+      isPlaying = false;
+      playBtn.textContent = '▶ Reproduzir demo';
+      recOverlay.classList.remove('on');
+      progress.style.width = '0%';
+    };
+    playBtn.onclick = () => { stop(); playBtn.onclick = playDemo; };
+
+    function step() {
+      if (stopped) return;
+      if (idx >= keyframes.length) { stop(); return; }
+      const from = idx === 0 ? 0 : keyframes[idx-1].ratio;
+      const to = keyframes[idx].ratio;
+      const dur = Math.max(600, Math.abs(to - from) * 4500);
+      const t0 = performance.now();
+
+      function tick(now) {
+        if (stopped) return;
+        const t = Math.min(1, (now - t0) / dur);
+        const e = ease(t);
+        const r = from + (to - from) * e;
+        const dTop = r * (dd.scrollHeight - dd.clientHeight);
+        const mTop = r * (md.scrollHeight - md.clientHeight);
+        syncing = true;
+        dw.scrollTo(0, dTop);
+        mw.scrollTo(0, mTop);
+        requestAnimationFrame(()=>{syncing=false;});
+        progress.style.width = ((idx + t) / keyframes.length * 100) + '%';
+        if (t < 1) requestAnimationFrame(tick);
+        else {
+          idx++;
+          setTimeout(step, keyframes[idx-1].hold);
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+    step();
+  }
+  playBtn.addEventListener('click', playDemo);
+})();
+</script>
+</body>
+</html>
