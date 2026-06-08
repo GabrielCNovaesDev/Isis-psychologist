@@ -1,9 +1,7 @@
-const WHATSAPP_URL = "https://wa.me/557788877371";
-
-// Atualiza todos os links de WhatsApp na página
-document.querySelectorAll("a[data-whatsapp]").forEach(a => {
-  a.href = WHATSAPP_URL;
-});
+// Os links de WhatsApp estão hardcoded no HTML (cada <a data-whatsapp>
+// já tem seu href real apontando para wa.me/557788877371).
+// Esta é a fonte única de verdade — não sobrescrevemos em runtime
+// para evitar problemas de cache/JS quebrado servindo href errado.
 
 // Header: adiciona .scrolled ao passar 24px
 const header = document.querySelector(".site-header");
