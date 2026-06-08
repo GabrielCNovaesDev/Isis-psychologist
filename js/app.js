@@ -28,6 +28,22 @@ drawer.querySelectorAll("a").forEach(a => {
 });
 
 // Reveal on scroll
+// Estratégia defensiva:
+// 1. Marcamos os elementos com .reveal-init (CSS põe opacity:0 + transform)
+// 2. IntersectionObserver adiciona .in quando entra na viewport
+// 3. Failsafe: após 1.5s, qualquer elemento ainda sem .in recebe .in
+//    (evita página invisível se o observer falhar)
+const revealTargets = document.querySelectorAll("[data-reveal], [data-reveal-stagger]");
+
+// Marca para iniciar a animação (só agora o CSS esconde os elementos)
+revealTargets.forEach(el => {
+  if (el.hasAttribute("data-reveal-stagger")) {
+    el.classList.add("reveal-init-stagger");
+  } else {
+    el.classList.add("reveal-init");
+  }
+});
+
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
@@ -35,11 +51,19 @@ const revealObserver = new IntersectionObserver((entries) => {
       revealObserver.unobserve(e.target);
     }
   });
-}, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+}, { threshold: 0.01, rootMargin: "0px 0px 0px 0px" });
 
-document.querySelectorAll("[data-reveal], [data-reveal-stagger]").forEach(el => {
+revealTargets.forEach(el => {
   revealObserver.observe(el);
 });
+
+// Failsafe: garante que após 1.5s todo conteúdo esteja visível,
+// mesmo se o observer não disparar (carregamento lento, mobile antigo, etc.)
+setTimeout(() => {
+  document.querySelectorAll(".reveal-init:not(.in), .reveal-init-stagger:not(.in)").forEach(el => {
+    el.classList.add("in");
+  });
+}, 1500);
 
 // Parallax (hero photo + about photo) — rAF throttled, respeita prefers-reduced-motion
 if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {

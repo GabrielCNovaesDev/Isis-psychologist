@@ -886,26 +886,30 @@ section.tight { padding-top: calc(var(--pad-section) * 0.45); padding-bottom: ca
 }
 
 /* ----------- reveal animation ----------- */
-[data-reveal] {
+/* Estratégia: o JS adiciona a classe .reveal-init nos elementos
+   [data-reveal] antes de o observer disparar. Só então eles ficam
+   com opacity: 0 e se preparam para a transição. Isso garante que
+   sem JS, o site aparece normalmente. */
+.reveal-init {
   opacity: 0;
   transform: translateY(28px);
   transition: opacity .9s cubic-bezier(.2,.6,.2,1), transform .9s cubic-bezier(.2,.6,.2,1);
 }
-[data-reveal].in {
+.reveal-init.in {
   opacity: 1;
   transform: none;
 }
-[data-reveal-stagger] > * {
+.reveal-init-stagger > * {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity .8s cubic-bezier(.2,.6,.2,1), transform .8s cubic-bezier(.2,.6,.2,1);
 }
-[data-reveal-stagger].in > * { opacity: 1; transform: none; }
-[data-reveal-stagger].in > *:nth-child(2) { transition-delay: .08s; }
-[data-reveal-stagger].in > *:nth-child(3) { transition-delay: .16s; }
-[data-reveal-stagger].in > *:nth-child(4) { transition-delay: .24s; }
-[data-reveal-stagger].in > *:nth-child(5) { transition-delay: .32s; }
-[data-reveal-stagger].in > *:nth-child(6) { transition-delay: .4s; }
+.reveal-init-stagger.in > * { opacity: 1; transform: none; }
+.reveal-init-stagger.in > *:nth-child(2) { transition-delay: .08s; }
+.reveal-init-stagger.in > *:nth-child(3) { transition-delay: .16s; }
+.reveal-init-stagger.in > *:nth-child(4) { transition-delay: .24s; }
+.reveal-init-stagger.in > *:nth-child(5) { transition-delay: .32s; }
+.reveal-init-stagger.in > *:nth-child(6) { transition-delay: .4s; }
 
 .parallax-wrap { overflow: hidden; }
 
