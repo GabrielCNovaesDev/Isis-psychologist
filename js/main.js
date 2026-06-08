@@ -1,4 +1,4 @@
-const WHATSAPP_URL = "https://wa.me/55XXXXXXXXXXX"; // TODO: substituir pelo número real da Isis
+const WHATSAPP_URL = "https://wa.me/557788877371";
 
 // Atualiza todos os links de WhatsApp na página
 document.querySelectorAll("a[data-whatsapp]").forEach(a => {
